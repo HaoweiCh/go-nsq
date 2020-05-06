@@ -1,4 +1,4 @@
-module github.com/nsqio/go-nsq
+module github.com/HaoweiCh/go-nsq
 
 go 1.11
 
