@@ -36,6 +36,13 @@ type BackoffStrategy interface {
 	Calculate(attempt int) time.Duration
 }
 
+// A Dialer is a means to establish a connection.
+// Custom dialers should also implement ContextDialer.
+type Dialer interface {
+	// Dial connects to the given address via the proxy.
+	Dial(network, addr string) (c net.Conn, err error)
+}
+
 // ExponentialStrategy implements an exponential backoff strategy (default)
 type ExponentialStrategy struct {
 	cfg *Config
@@ -92,6 +99,7 @@ type Config struct {
 	// used to Initialize, Validate
 	configHandlers []configHandler
 
+	Dialer      Dialer        `opt:"dialer"`
 	DialTimeout time.Duration `opt:"dial_timeout" default:"1s"`
 
 	// Deadlines for network reads and writes
