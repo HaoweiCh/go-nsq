@@ -192,7 +192,7 @@ func (w *Producer) Stop() {
 // and the response error if present
 func (w *Producer) PublishAsync(topic string, body []byte, doneChan chan *ProducerTransaction,
 	args ...interface{}) error {
-	return w.sendCommandAsync(Publish(topic, body), doneChan, args)
+	return w.sendCommandAsync(Publish(topic, nil, body), doneChan, args)
 }
 
 // MultiPublishAsync publishes a slice of message bodies to the specified topic
@@ -213,8 +213,8 @@ func (w *Producer) MultiPublishAsync(topic string, body [][]byte, doneChan chan 
 
 // Publish synchronously publishes a message body to the specified topic, returning
 // an error if publish failed
-func (w *Producer) Publish(topic string, body []byte) error {
-	return w.sendCommand(Publish(topic, body))
+func (w *Producer) Publish(topic string, meta, body []byte) error {
+	return w.sendCommand(Publish(topic, meta, body))
 }
 
 // MultiPublish synchronously publishes a slice of message bodies to the specified topic, returning

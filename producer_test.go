@@ -48,14 +48,14 @@ func TestProducerConnection(t *testing.T) {
 	w, _ := NewProducer("127.0.0.1:4150", config)
 	w.SetLogger(nullLogger, LogLevelInfo)
 
-	err := w.Publish("write_test", []byte("test"))
+	err := w.Publish("write_test", []byte("should success"), []byte("body test"))
 	if err != nil {
 		t.Fatalf("should lazily connect - %s", err)
 	}
 
 	w.Stop()
 
-	err = w.Publish("write_test", []byte("fail test"))
+	err = w.Publish("write_test", []byte("should failed"), []byte("fail test"))
 	if err != ErrStopped {
 		t.Fatalf("should not be able to write after Stop()")
 	}
@@ -93,13 +93,13 @@ func TestProducerPublish(t *testing.T) {
 	defer w.Stop()
 
 	for i := 0; i < msgCount; i++ {
-		err := w.Publish(topicName, []byte("publish_test_case"))
+		err := w.Publish(topicName, nil, []byte("publish_test_case"))
 		if err != nil {
 			t.Fatalf("error %s", err)
 		}
 	}
 
-	err := w.Publish(topicName, []byte("bad_test_case"))
+	err := w.Publish(topicName, nil, []byte("bad_test_case"))
 	if err != nil {
 		t.Fatalf("error %s", err)
 	}
@@ -126,7 +126,7 @@ func TestProducerMultiPublish(t *testing.T) {
 		t.Fatalf("error %s", err)
 	}
 
-	err = w.Publish(topicName, []byte("bad_test_case"))
+	err = w.Publish(topicName, nil, []byte("bad_test_case"))
 	if err != nil {
 		t.Fatalf("error %s", err)
 	}
@@ -161,7 +161,7 @@ func TestProducerPublishAsync(t *testing.T) {
 		}
 	}
 
-	err := w.Publish(topicName, []byte("bad_test_case"))
+	err := w.Publish(topicName, nil, []byte("bad_test_case"))
 	if err != nil {
 		t.Fatalf("error %s", err)
 	}
@@ -200,7 +200,7 @@ func TestProducerMultiPublishAsync(t *testing.T) {
 		t.Fatalf(`proxied arg %d != 1`, trans.Args[1].(int))
 	}
 
-	err = w.Publish(topicName, []byte("bad_test_case"))
+	err = w.Publish(topicName, nil, []byte("bad_test_case"))
 	if err != nil {
 		t.Fatalf("error %s", err)
 	}
@@ -217,7 +217,7 @@ func TestProducerHeartbeat(t *testing.T) {
 	w.SetLogger(nullLogger, LogLevelInfo)
 	defer w.Stop()
 
-	err := w.Publish(topicName, []byte("publish_test_case"))
+	err := w.Publish(topicName, nil, []byte("publish_test_case"))
 	if err == nil {
 		t.Fatalf("error should not be nil")
 	}
@@ -232,7 +232,7 @@ func TestProducerHeartbeat(t *testing.T) {
 	w.SetLogger(nullLogger, LogLevelInfo)
 	defer w.Stop()
 
-	err = w.Publish(topicName, []byte("publish_test_case"))
+	err = w.Publish(topicName, nil, []byte("publish_test_case"))
 	if err != nil {
 		t.Fatalf(err.Error())
 	}
@@ -241,13 +241,13 @@ func TestProducerHeartbeat(t *testing.T) {
 
 	msgCount := 10
 	for i := 0; i < msgCount; i++ {
-		err := w.Publish(topicName, []byte("publish_test_case"))
+		err := w.Publish(topicName, nil, []byte("publish_test_case"))
 		if err != nil {
 			t.Fatalf("error %s", err)
 		}
 	}
 
-	err = w.Publish(topicName, []byte("bad_test_case"))
+	err = w.Publish(topicName, nil, []byte("bad_test_case"))
 	if err != nil {
 		t.Fatalf("error %s", err)
 	}
@@ -358,7 +358,7 @@ func BenchmarkProducer(b *testing.B) {
 		go func() {
 			<-startCh
 			for i := 0; i < b.N/parallel; i++ {
-				p.Publish("test", body)
+				p.Publish("test", nil, body)
 			}
 			wg.Done()
 		}()

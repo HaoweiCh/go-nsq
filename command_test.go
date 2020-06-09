@@ -8,7 +8,7 @@ import (
 func BenchmarkCommand(b *testing.B) {
 	b.StopTimer()
 	data := make([]byte, 2048)
-	cmd := Publish("test", data)
+	cmd := Publish("test", []byte("meta"), data)
 	var buf bytes.Buffer
 	b.StartTimer()
 

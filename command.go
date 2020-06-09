@@ -128,9 +128,12 @@ func Ping() *Command {
 }
 
 // Publish creates a new Command to write a message to a given topic
-func Publish(topic string, body []byte) *Command {
-	var params = [][]byte{[]byte(topic)}
-	return &Command{[]byte("PUB"), params, body}
+func Publish(topic string, meta, body []byte) *Command {
+	var params = [][]byte{
+		[]byte(topic),
+		[]byte(strconv.Itoa(len(meta))),
+	}
+	return &Command{[]byte("PUB"), params, append(meta, body...)}
 }
 
 // DeferredPublish creates a new Command to write a message to a given topic
