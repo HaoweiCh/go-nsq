@@ -215,10 +215,10 @@ func frameMessage(m *Message) []byte {
 
 func TestConsumerBackoff(t *testing.T) {
 	msgIDGood := MessageID{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 's', 'd', 'f', 'g', 'h'}
-	msgGood := NewMessage(msgIDGood, []byte("good"))
+	msgGood := NewMessage(msgIDGood, nil, []byte("good"))
 
 	msgIDBad := MessageID{'z', 'x', 'c', 'v', 'b', '6', '7', '8', '9', '0', 'a', 's', 'd', 'f', 'g', 'h'}
-	msgBad := NewMessage(msgIDBad, []byte("bad"))
+	msgBad := NewMessage(msgIDBad, nil, []byte("bad"))
 
 	script := []instruction{
 		// IDENTIFY
@@ -291,9 +291,9 @@ func TestConsumerRequeueNoBackoff(t *testing.T) {
 	msgIDRequeue := MessageID{'r', 'e', 'q', 'v', 'b', '6', '7', '8', '9', '0', 'a', 's', 'd', 'f', 'g', 'h'}
 	msgIDRequeueNoBackoff := MessageID{'r', 'e', 'q', 'n', 'b', 'a', 'c', 'k', '9', '0', 'a', 's', 'd', 'f', 'g', 'h'}
 
-	msgGood := NewMessage(msgIDGood, []byte("good"))
-	msgRequeue := NewMessage(msgIDRequeue, []byte("requeue"))
-	msgRequeueNoBackoff := NewMessage(msgIDRequeueNoBackoff, []byte("requeue_no_backoff_1"))
+	msgGood := NewMessage(msgIDGood, nil, []byte("good"))
+	msgRequeue := NewMessage(msgIDRequeue, nil, []byte("requeue"))
+	msgRequeueNoBackoff := NewMessage(msgIDRequeueNoBackoff, nil, []byte("requeue_no_backoff_1"))
 
 	script := []instruction{
 		// IDENTIFY
@@ -359,8 +359,8 @@ func TestConsumerBackoffDisconnect(t *testing.T) {
 	msgIDGood := MessageID{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 's', 'd', 'f', 'g', 'h'}
 	msgIDRequeue := MessageID{'r', 'e', 'q', 'v', 'b', '6', '7', '8', '9', '0', 'a', 's', 'd', 'f', 'g', 'h'}
 
-	msgGood := NewMessage(msgIDGood, []byte("good"))
-	msgRequeue := NewMessage(msgIDRequeue, []byte("requeue"))
+	msgGood := NewMessage(msgIDGood, nil, []byte("good"))
+	msgRequeue := NewMessage(msgIDRequeue, nil, []byte("requeue"))
 
 	script := []instruction{
 		// IDENTIFY
@@ -472,7 +472,7 @@ func TestConsumerBackoffDisconnect(t *testing.T) {
 func TestConsumerPause(t *testing.T) {
 	msgIDGood := MessageID{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 's', 'd', 'f', 'g', 'h'}
 
-	msgGood := NewMessage(msgIDGood, []byte("good"))
+	msgGood := NewMessage(msgIDGood, nil, []byte("good"))
 
 	script := []instruction{
 		// IDENTIFY
