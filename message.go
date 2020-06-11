@@ -182,6 +182,11 @@ func DecodeMessage(b []byte) (*Message, error) {
 	msg.Attempts = binary.BigEndian.Uint16(b[8:10])
 	copy(msg.ID[:], b[10:10+MsgIDLength])
 	metaSize := binary.BigEndian.Uint16(b[10+MsgIDLength : 10+MsgIDLength+MsgMetaSizeLength])
+
+	if 10+MsgIDLength+MsgMetaSizeLength+int(metaSize) > len(msg.Body) {
+		return nil, errors.New("not enough data to decode valid message with meta block")
+	}
+
 	if metaSize > 0 {
 		msg.Meta = b[10+MsgIDLength+MsgMetaSizeLength : 10+MsgIDLength+MsgMetaSizeLength+metaSize]
 	} else {
