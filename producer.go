@@ -247,6 +247,11 @@ func (w *Producer) DeferredPublishAsync(topic string, delay time.Duration, body 
 	return w.sendCommandAsync(DeferredPublish(topic, delay, body), doneChan, args)
 }
 
+// Register synchronously add a topic/channel
+func (w *Producer) Register(topic, channel string) error {
+	return w.sendCommand(Register(topic, channel))
+}
+
 func (w *Producer) sendCommand(cmd *Command) error {
 	doneChan := make(chan *ProducerTransaction)
 	err := w.sendCommandAsync(cmd, doneChan, nil)

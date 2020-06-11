@@ -53,6 +53,14 @@ func TestProducerConnection(t *testing.T) {
 		t.Fatalf("should lazily connect - %s", err)
 	}
 
+	if err := w.Register("write_test", "register"); err != nil {
+		t.Fatalf("should register a new channel - %s", err)
+	}
+
+	if err := w.Register("write_test", ""); err == nil {
+		t.Fatalf("empty channel name should faild")
+	}
+
 	w.Stop()
 
 	err = w.Publish("write_test", []byte("should failed"), []byte("fail test"))
